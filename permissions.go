@@ -2,9 +2,11 @@
 package permissions
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
+	"github.com/Unknwon/macaron"
 	"github.com/grengojbo/pinterface"
 )
 
@@ -23,9 +25,9 @@ type Options struct {
 	Interval int
 	// Configuration section name. Default is "security".
 	Section string
-	Db int
-	Host       string
-	Port       int
+	Db      int
+	Host    string
+	Port    int
 }
 
 func prepareOptions(options []Options) Options {
@@ -70,10 +72,27 @@ type Permissions struct {
 	denied             http.HandlerFunc
 }
 
+func Permissioner(options ...Options) macaron.Handler {
+	opt := prepareOptions(options)
+	perm := NewWithConf(opt)
+	// perm, err := NewWithConf(opt)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	return func(ctx *macaron.Context) {
+		ctx.Map(perm)
+	}
+}
+
 // Initialize a Permissions struct with all the default settings.
 // This will also connect to the redis host at localhost:6379.
 func New() *Permissions {
 	return NewPermissions(NewUserStateSimple())
+}
+
+// Initialize a Permissions struct with config
+func NewWithConf(opt Options) *Permissions {
+	return NewPermissions(NewUserState(opt.Db, true, fmt.Sprintf("%s:%d", opt.Host, opt.Port)))
 }
 
 // Initialize a Permissions struct with Redis DB index and host:port
