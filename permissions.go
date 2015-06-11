@@ -13,6 +13,53 @@ const (
 	Version = 2.2
 )
 
+// Options represents a struct for specifying configuration options for the permissions middleware.
+type Options struct {
+	// Name of adapter. Default is "redis".
+	Adapter string
+	// Adapter configuration, it's corresponding to adapter.
+	AdapterConfig string
+	// GC interval time in seconds. Default is 60.
+	Interval int
+	// Configuration section name. Default is "security".
+	Section string
+	Db int
+	Host       string
+	Port       int
+}
+
+func prepareOptions(options []Options) Options {
+	var opt Options
+	if len(options) > 0 {
+		opt = options[0]
+	}
+	if len(opt.Section) == 0 {
+		opt.Section = "security"
+	}
+	sec := macaron.Config().Section(opt.Section)
+
+	if len(opt.Adapter) == 0 {
+		opt.Adapter = sec.Key("PERMISSIONS_ADAPTER").MustString("redis")
+	}
+	if opt.Interval == 0 {
+		opt.Interval = sec.Key("INTERVAL").MustInt(60)
+	}
+	if opt.Db == 0 {
+		opt.Db = sec.Key("PERMISSIONS_DB").MustInt(0)
+	}
+	if len(opt.Host) == 0 {
+		opt.Host = sec.Key("PERMISSIONS_HOST").MustString("127.0.0.1")
+	}
+	if opt.Port == 0 {
+		opt.Port = sec.Key("PERMISSIONS_PORT").MustInt(6379)
+	}
+	if len(opt.AdapterConfig) == 0 {
+		opt.AdapterConfig = sec.Key("PERMISSIONS_CONFIG").MustString("")
+	}
+
+	return opt
+}
+
 // The structure that keeps track of the permissions for various path prefixes
 type Permissions struct {
 	state              *UserState
