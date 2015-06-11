@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/xyproto/cookie"
 	"github.com/grengojbo/pinterface"
-	"github.com/xyproto/simpleredis"
+	"github.com/grengojbo/simpleredis"
+	"github.com/xyproto/cookie"
 )
 
 const (
