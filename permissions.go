@@ -2,9 +2,10 @@
 package permissions
 
 import (
-	// "github.com/xyproto/pinterface"
 	"net/http"
 	"strings"
+
+	"github.com/grengojbo/pinterface"
 )
 
 const (
@@ -57,7 +58,7 @@ func (perm *Permissions) DenyFunction() http.HandlerFunc {
 }
 
 // Retrieve the UserState struct
-func (perm *Permissions) UserState() IUserState {
+func (perm *Permissions) UserState() pinterface.IUserState {
 	return perm.state
 }
 

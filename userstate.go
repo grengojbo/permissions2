@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/xyproto/cookie"
-	// "github.com/xyproto/pinterface"
+	"github.com/grengojbo/pinterface"
 	"github.com/xyproto/simpleredis"
 )
 
@@ -120,7 +120,7 @@ func NewUserState(dbindex int, randomseed bool, redisHostPort string) *UserState
 }
 
 // Get the Host (for qualifying for the IUserState interface)
-func (state *UserState) Host() IHost {
+func (state *UserState) Host() pinterface.IHost {
 	return state.pool
 }
 
@@ -272,7 +272,7 @@ func (state *UserState) ConfirmationCode(username string) (string, error) {
 }
 
 // Get the users HashMap.
-func (state *UserState) Users() IHashMap {
+func (state *UserState) Users() pinterface.IHashMap {
 	return state.users
 }
 
@@ -571,6 +571,6 @@ NEXT:
 }
 
 // Return a struct for creating datastructures with
-func (state *UserState) Creator() ICreator {
+func (state *UserState) Creator() pinterface.ICreator {
 	return simpleredis.NewCreator(state.pool, state.dbindex)
 }
