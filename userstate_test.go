@@ -1,7 +1,7 @@
 package permissions
 
 import (
-	"github.com/xyproto/pinterface"
+	// "github.com/xyproto/pinterface"
 	"testing"
 )
 
@@ -124,7 +124,7 @@ func TestUserStateKeeper(t *testing.T) {
 	userstate := NewUserStateSimple()
 
 	// Check that the userstate qualifies for the IUserState interface
-	var _ pinterface.IUserState = userstate
+	var _ IUserState = userstate
 }
 
 func TestHostPassword(t *testing.T) {
